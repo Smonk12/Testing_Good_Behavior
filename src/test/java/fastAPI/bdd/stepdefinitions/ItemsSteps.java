@@ -1,56 +1,42 @@
 package fastAPI.bdd.stepdefinitions;
 
-import fastAPI.bdd.pages.ItemsPage;
+import fastAPI.pages.ItemsPage;
+import fastAPI.pages.LoginPage;
+import fastAPI.tests.BaseTest;
+import fastAPI.utils.TestData;
 import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.*;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
+public class ItemsSteps extends BaseTest {
 
-import static org.junit.jupiter.api.Assertions.*;
-
-public class ItemsSteps {
-
-    private WebDriver driver;
     private ItemsPage itemsPage;
     private String lastCreatedTitle;
 
+    @Given("the user is on the Items page")
+    public void i_am_logged_in_and_on_the_items_page() {
+        setup();
 
-    @Before
-    public void setUp() {
-        driver = new ChromeDriver();
-        driver.get("http://localhost:5173/login");
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login(TestData.Users.VALID_EMAIL, TestData.Users.VALID_PASSWORD);
 
-        driver.findElement(By.name("username")).sendKeys("p.bobita@gmail.com");
-        driver.findElement(By.name("password")).sendKeys("asdasdasd");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//p[text()='Welcome back, nice to see you again!']")
+                By.xpath("//p[contains(text(),'Welcome back')]")
         ));
 
-        driver.get("http://localhost:5173/items?page=1");
-
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("table")));
-
         itemsPage = new ItemsPage(driver);
+        driver.get(BASE_URL + "/items?page=1");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("table")));
+        Assertions.assertTrue(itemsPage.isItemsTableVisible(),
+                "Items table should be visible after login.");
     }
 
-    @Given("the user is on the Items page")
-    public void theUserIsOnItemsPage() {
-        assertTrue(itemsPage.isItemsTableVisible());
-    }
 
     @When("the user clicks the {string} button")
-    public void theUserClicksButton(String buttonLabel) {
+    public void the_user_clicks_the_button(String buttonLabel) {
         switch (buttonLabel.toLowerCase()) {
             case "add item":
                 itemsPage.clickAddItem();
@@ -61,36 +47,37 @@ public class ItemsSteps {
             case "cancel":
                 itemsPage.cancelNewItem();
                 break;
+            default:
+                throw new IllegalArgumentException("Unknown button label: " + buttonLabel);
         }
     }
 
     @When("the user enters {string} as title")
-    public void theUserEntersTitle(String title) {
+    public void the_user_enters_as_title(String title) {
         lastCreatedTitle = title;
         itemsPage.enterTitle(title);
     }
 
     @When("the user enters {string} as description")
-    public void theUserEntersDescription(String description) {
+    public void the_user_enters_as_description(String description) {
         itemsPage.enterDescription(description);
     }
 
     @Then("a new item should appear in the list with title {string}")
-    public void newItemShouldAppear(String expectedTitle) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    public void a_new_item_should_appear_in_the_list_with_title(String expectedTitle) {
         boolean found = wait.until(driver -> itemsPage.isItemTitlePresentAnywhere(expectedTitle));
-        assertTrue(found, "Item with title '" + expectedTitle + "' was not found in the table.");
+        Assertions.assertTrue(found, "Item with title '" + expectedTitle + "' was not found in the table.");
     }
 
     @Then("the item should have a generated ID")
-    public void itemShouldHaveGeneratedId() {
+    public void the_item_should_have_a_generated_id() {
         String id = itemsPage.getIdForTitle(lastCreatedTitle);
-        assertNotNull(id, "ID not found for item with title: " + lastCreatedTitle);
-        assertFalse(id.isEmpty(), "ID is empty for item with title: " + lastCreatedTitle);
+        Assertions.assertNotNull(id, "ID not found for item with title: " + lastCreatedTitle);
+        Assertions.assertFalse(id.isEmpty(), "ID is empty for item with title: " + lastCreatedTitle);
     }
 
     @After
     public void tearDown() {
-        driver.quit();
+        teardown();
     }
 }

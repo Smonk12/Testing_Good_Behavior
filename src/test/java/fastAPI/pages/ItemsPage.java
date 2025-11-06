@@ -1,4 +1,4 @@
-package fastAPI.bdd.pages;
+package fastAPI.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
