@@ -12,7 +12,6 @@ public class LoginSteps extends BaseTest {
 
     @Given("I am on the login page")
     public void i_am_on_the_login_page() {
-        setup();
         loginPage = new LoginPage(driver);
         loginPage.navigateTo("/login");
     }
@@ -56,7 +55,6 @@ public class LoginSteps extends BaseTest {
     public void i_should_be_redirected_to_the_welcome_page() {
         Assertions.assertTrue(loginPage.isLoginSuccessful(),
                 "Login should succeed and show the welcome message");
-        teardown();
     }
 
     @Then("I should remain on the login page")

@@ -7,12 +7,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class SignUpPage extends BasePage {
 
-    private final By fullNameField        = By.name("full_name");
-    private final By emailField           = By.name("email");
-    private final By passwordField        = By.name("password");
+    private final By fullNameField = By.name("full_name");
+    private final By emailField = By.name("email");
+    private final By passwordField = By.name("password");
     private final By confirmPasswordField = By.name("confirm_password");
-    private final By signUpButton         = By.xpath("//button[contains(text(),'Sign Up')]");
-    private final By loginLinkIndicator   = By.xpath("//*[contains(text(),'Log In')]");
+    private final By signUpButton = By.xpath("//button[contains(text(),'Sign Up')]");
+    private final By loginLinkIndicator = By.xpath("//*[contains(text(),'Log In')]");
 
     public SignUpPage(WebDriver driver) {
         super(driver);

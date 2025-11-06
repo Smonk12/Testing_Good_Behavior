@@ -12,7 +12,6 @@ public class SignUpSteps extends BaseTest {
 
     @Given("I am on the signup page")
     public void i_am_on_the_signup_page() {
-        setup();
         signUpPage = new SignUpPage(driver);
         signUpPage.navigateTo("/signup");
     }
@@ -62,11 +61,10 @@ public class SignUpSteps extends BaseTest {
         signUpPage.clickSignUpButton();
     }
 
-    @Then("I should be redirected to the login page")
-    public void i_should_be_redirected_to_the_login_page() {
+    @Then("I should be redirected to the login page after signup")
+    public void i_should_be_redirected_to_the_login_page_after_signup() {
         Assertions.assertTrue(signUpPage.isSignUpSuccessful(),
                 "Sign-up should succeed and redirect to login");
-        teardown();
     }
 
     @Then("I should remain on the signup page")

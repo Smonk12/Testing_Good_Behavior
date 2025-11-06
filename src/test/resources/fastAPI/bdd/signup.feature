@@ -6,7 +6,8 @@ Feature: User Signup
   Scenario: Successful signup with valid data
     When I enter a valid name, email, and password
     And I click the Sign Up button
-    Then I should be redirected to the login page
+    Then I should be redirected to the login page after signup
+
 
   Scenario: Signup with empty fields
     When I leave all signup fields empty
