@@ -10,8 +10,8 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectPackages("fastAPI_bdd")
+@SelectPackages("fastAPI.bdd")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
-@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "fastAPI_bdd")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "fastAPI.bdd")
 public class RunCucumberTest {
 }
