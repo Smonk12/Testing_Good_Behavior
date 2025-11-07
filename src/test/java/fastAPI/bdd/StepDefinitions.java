@@ -2,8 +2,6 @@ package fastAPI.bdd;
 
 import io.cucumber.java.en.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class StepDefinitions {
 
     @Given("an example scenario")
